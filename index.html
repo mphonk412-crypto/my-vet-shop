@@ -2,67 +2,100 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Вет-Аптека: Замовлення</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вет-Маркет: Каталог</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Добавим немного стилей для сетки товаров прямо здесь */
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
+        .card { width: 300px; margin: 0; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; position: relative; }
+        .close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 24px; }
+    </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>🐾 Вет-Аптека</h1>
-        <p>Здоров'я ваших улюбленців — наш пріоритет!</p>
-        
-        <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=500" alt="Вет допомога" class="product-img">
-        
-        <h3>Вітамінний комплекс для тварин</h3>
-        <p class="price">450 ₴</p>
-        
-        <hr>
+    <h1 style="text-align: center; margin-top: 30px; color: #333;">🐾 Наш Вет-Асортимент</h1>
 
-        <form id="orderForm">
-            <input type="text" id="name" placeholder="Ваше ім'я" required class="input-field">
-            <input type="tel" id="phone" placeholder="Номер телефону" required class="input-field">
-            <textarea id="address" placeholder="Місто та відділення пошти" rows="3" required class="input-field"></textarea>
-            
-            <button type="submit" id="btnSend">Замовити зараз</button>
-        </form>
+    <div class="container">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=400" alt="Вітаміни" class="product-img">
+            <h3>Вітамінний комплекс</h3>
+            <p class="price">450 ₴</p>
+            <button onclick="openOrder('Вітамінний комплекс')">Замовити</button>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?q=80&w=400" alt="Шампунь" class="product-img">
+            <h3>Шампунь для лапок</h3>
+            <p class="price">280 ₴</p>
+            <button onclick="openOrder('Шампунь для лапок')">Замовити</button>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=400" alt="Іграшка" class="product-img">
+            <h3>М'ячик-антистрес</h3>
+            <p class="price">120 ₴</p>
+            <button onclick="openOrder('М\'ячик-антистрес')">Замовити</button>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Оформлення замовлення</h2>
+            <form id="orderForm">
+                <input type="hidden" id="productName">
+                <input type="text" id="name" placeholder="Ваше ім'я" required class="input-field">
+                <input type="tel" id="phone" placeholder="Номер телефону" required class="input-field">
+                <textarea id="address" placeholder="Адреса доставки" rows="3" required class="input-field"></textarea>
+                <button type="submit" style="width: 100%;">Підтвердити замовлення</button>
+            </form>
+        </div>
     </div>
 
     <script>
-        // Твои данные уже здесь
         const TOKEN = "7761959832:AAF7YrnNzuwmyppI-8rovtq9vYN5JhipfB0";
         const CHAT_ID = "5087162724"; 
-        const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+
+        function openOrder(product) {
+            document.getElementById('orderModal').style.display = 'flex';
+            document.getElementById('productName').value = product;
+            document.getElementById('modalTitle').innerText = product;
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
 
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            const product = document.getElementById('productName').value;
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
 
-            let message = `<b>🔔 НОВЕ ЗАМОВЛЕННЯ!</b>\n`;
-            message += `<b>👤 Клієнт:</b> ${document.getElementById('name').value}\n`;
-            message += `<b>📞 Тел:</b> ${document.getElementById('phone').value}\n`;
-            message += `<b>📍 Адреса:</b> ${document.getElementById('address').value}`;
+            let message = `<b>🛒 НОВЕ ЗАМОВЛЕННЯ</b>\n`;
+            message += `<b>📦 Товар:</b> ${product}\n`;
+            message += `<b>👤 Клієнт:</b> ${name}\n`;
+            message += `<b>📞 Тел:</b> ${phone}\n`;
+            message += `<b>📍 Адреса:</b> ${address}`;
 
-            fetch(URI_API, {
+            fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    parse_mode: 'html',
-                    text: message
-                })
+                body: JSON.stringify({ chat_id: CHAT_ID, parse_mode: 'html', text: message })
             })
-            .then(response => {
-                if(response.ok) {
-                    alert('✅ Дякуємо! Замовлення прийнято. Бот надіслав сповіщення.');
-                    document.getElementById('orderForm').reset();
-                } else {
-                    alert('❌ Помилка. Перевірте бота.');
+            .then(res => {
+                if(res.ok) {
+                    alert('Дякуємо! Менеджер зв\'яжеться з вами.');
+                    closeModal();
+                    this.reset();
                 }
-            })
-            .catch(error => {
-                alert('💥 Сталася помилка відправки!');
             });
         });
     </script>
-
 </body>
 </html>
