@@ -1,0 +1,74 @@
+/* Общие настройки для всей страницы */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f0f2f5; /* Светло-серый фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Белая карточка товара */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Картинка товара */
+.product-img {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+/* Цена */
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745; /* Зеленый цвет для цены */
+    margin: 15px 0;
+}
+
+/* Поля ввода (Имя, Телефон, Адрес) */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Чтобы поля не вылезали за края */
+    font-size: 14px;
+}
+
+/* Кнопка купить */
+button {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02); /* Кнопка чуть увеличится при наведении */
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 25px 0;
+}
